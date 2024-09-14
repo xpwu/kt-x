@@ -31,27 +31,27 @@ class AndroidLogger: Logger {
 
 }
 
-fun FileInfo(): String {
-	val st = Throwable().stackTrace[2]
+fun FileInfo(popStack:Int = 0): String {
+	val st = Throwable().stackTrace[popStack+1]
 	val first = if (st.fileName.length >= 15) st.fileName.length-15 else 0
 	return "${st.fileName.slice(first until st.fileName.length)}:${st.lineNumber}"
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-class PrintlnLogger: Logger {
+class PrintlnLogger(private val popStack:Int = 0): Logger {
 	override fun Debug(tag: String, msg: String) {
-		println("${LocalDateTime.now()} ${FileInfo()} Debug: $tag  --->  $msg")
+		println("${LocalDateTime.now()} ${FileInfo(popStack+1)} Debug: $tag  --->  $msg")
 	}
 
 	override fun Error(tag: String, msg: String) {
-		println("${LocalDateTime.now()} ${FileInfo()} Error: $tag  --->  $msg")
+		println("${LocalDateTime.now()} ${FileInfo(popStack+1)} Error: $tag  --->  $msg")
 	}
 
 	override fun Info(tag: String, msg: String) {
-		println("${LocalDateTime.now()} ${FileInfo()} Info: $tag  --->  $msg")
+		println("${LocalDateTime.now()} ${FileInfo(popStack+1)} Info: $tag  --->  $msg")
 	}
 
 	override fun Warning(tag: String, msg: String) {
-		println("${LocalDateTime.now()} ${FileInfo()} Warning: $tag  --->  $msg")
+		println("${LocalDateTime.now()} ${FileInfo(popStack+1)} Warning: $tag  --->  $msg")
 	}
 }
